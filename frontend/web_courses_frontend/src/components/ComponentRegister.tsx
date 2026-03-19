@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AuthInput, AuthFooterLink } from "./AuthShared";
+import { AuthBoxInput, AuthFooterLink } from "./ComponentAuthShared";
 
 interface ComponentRegisterProps {
     username: string;
@@ -30,19 +30,19 @@ export const ComponentRegister = ({
         <form onSubmit={handleSubmit} className="bg-gray-100 p-8 rounded-lg shadow-md w-100">
             <div>
                 <h1 className="text-3xl font-bold text-center mb-4">Register</h1>
-                <AuthInput
+                <AuthBoxInput
                     label="Username"
                     text={username}
                     onInputChange={setUsername}
                     type="text"
                 />
-                <AuthInput
+                <AuthBoxInput
                     label="Email"
                     text={email}
                     onInputChange={setEmail}
                     type="email"
                 />
-                <AuthInput
+                <AuthBoxInput
                     label="Password"
                     text={password}
                     onInputChange={setPassword}

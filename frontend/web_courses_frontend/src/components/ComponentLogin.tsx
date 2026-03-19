@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { AuthInput, AuthFooterLink } from "./AuthShared";
+import { AuthBoxInput, AuthFooterLink } from "./ComponentAuthShared";
 
 interface ComponentLoginProps {
-    email: string;
-    setEmail: (val: string) => void;
+    user: string;
+    setUser: (val: string) => void;
     password: string;
     setPassword: (val: string) => void;
     registerClickHandler: (e: React.MouseEvent<HTMLAnchorElement>) => void;
@@ -12,8 +12,8 @@ interface ComponentLoginProps {
 }
 
 export const CommponentLogin = ({
-    email,
-    setEmail,
+    user,
+    setUser,
     password,
     setPassword,
     registerClickHandler,
@@ -26,13 +26,13 @@ export const CommponentLogin = ({
         <form onSubmit={handleSubmit} className="bg-gray-100 p-8 rounded-lg shadow-md w-100">
             <div>
                 <h1 className="text-3xl font-bold text-center mb-4">Login</h1>
-                <AuthInput
-                    label="Email"
-                    text={email}
-                    onInputChange={setEmail}
-                    type="email"
+                <AuthBoxInput
+                    label="Username"
+                    text={user}
+                    onInputChange={setUser}
+                    type="text"
                 />
-                <AuthInput
+                <AuthBoxInput
                     label="Password"
                     text={password}
                     onInputChange={setPassword}

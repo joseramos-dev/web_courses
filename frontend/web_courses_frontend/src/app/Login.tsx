@@ -1,44 +1,57 @@
-import { useState } from 'react'
-import {CommponentLogin} from '../components/ComponentLogin'
-
-
+import { useState, useEffect, use } from 'react'
+import { useNavigate } from "react-router-dom"
+import { CommponentLogin } from '../components/ComponentLogin'
+import { login } from '../services/authServices'
 
 
 const Login = () => {
-    const [email, setEmail] = useState('')
+    const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
-    
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (localStorage.getItem('isAuthenticated') === 'true') {
+            navigate('/profile')
+        }
+    }, [navigate])
+
+
 
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-
-        if (!email || !password) {
+        if (!userName || !password) {
             setError('Por favor, complete todos los campos.')
             return
         }
         setError('')
-        console.log("Email:", email, "Password:", password)
-        // Aquí puedes agregar la lógica para enviar los datos de inicio de sesión al backend
+        login(userName, password).then(() => {
+            navigate('/profile')
+        }).catch((err) => {
+            console.error("Login failed:", err)
+            setError('Credenciales inválidas. Inténtalo de nuevo.')
+        })
+
     }
 
     const registerClickHandler = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault()
         console.log("Redirect to register page")
+        navigate('/register')
     }
 
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-green-900">
-                <CommponentLogin 
-                    email={email} 
-                    setEmail={setEmail} 
-                    password={password} 
-                    setPassword={setPassword} 
-                    registerClickHandler={registerClickHandler} 
-                    handleSubmit={handleSubmit}
-                    error={error}
-                />
+            <CommponentLogin
+                user={userName}
+                setUser={setUserName}
+                password={password}
+                setPassword={setPassword}
+                registerClickHandler={registerClickHandler}
+                handleSubmit={handleSubmit}
+                error={error}
+            />
         </div>
     )
 }

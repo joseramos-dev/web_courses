@@ -1,0 +1,58 @@
+[
+    {
+        "id": 1,
+        "name": "Alice Student",
+        "email": "alice@student.example",
+        "password": "passAlice123",
+        "date_creation": "01-10-2023",
+        "role": "student"
+    },
+    {
+        "id": 2,
+        "name": "Bob Instructor",
+        "email": "bob@instructor.example",
+        "password": "passBob123",
+        "date_creation": "02-10-2023",
+        "role": "instructor"
+    },
+    {
+        "id": 3,
+        "name": "Carol Admin",
+        "email": "carol@admin.example",
+        "password": "passCarol123",
+        "date_creation": "03-10-2023",
+        "role": "admin"
+    },
+    {
+        "id": 4,
+        "name": "David Student",
+        "email": "david@student.example",
+        "password": "passDavid123",
+        "date_creation": "04-10-2023",
+        "role": "student"
+    },
+    {
+        "id": 5,
+        "name": "Eve Instructor",
+        "email": "eve@instructor.example",
+        "password": "passEve123",
+        "date_creation": "05-10-2023",
+        "role": "instructor"
+    },
+    {
+        "id": 6,
+        "name": "string",
+        "email": "string",
+        "password": "string",
+        "date_creation": "06-10-2023",
+        "role": "student"
+    },
+    {
+        "id": 7,
+        "name": "string",
+        "email": "string",
+        "password": "string",
+        "date_creation": "07-10-2023",
+        "role": "student"
+    }
+]
