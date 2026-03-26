@@ -4,7 +4,7 @@ export interface InterfaceUser {
     name: string,
     email: string,
     password?: string,
-    role: 'admin' | 'user' | 'instructor',
+    role: 'admin' | 'student' | 'instructor',
     date_creation: string
 }
 

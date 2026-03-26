@@ -2,6 +2,7 @@ import { useState, useEffect, use } from 'react'
 import { useNavigate } from "react-router-dom"
 import { CommponentLogin } from '../components/ComponentLogin'
 import { login } from '../services/authServices'
+import { checkIfLogged } from '../services/LocalStorageUser'
 
 
 const Login = () => {
@@ -11,7 +12,9 @@ const Login = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (localStorage.getItem('isAuthenticated') === 'true') {
+        if (
+            checkIfLogged()
+        ) {
             navigate('/profile')
         }
     }, [navigate])

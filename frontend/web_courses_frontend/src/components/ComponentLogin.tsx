@@ -20,7 +20,6 @@ export const CommponentLogin = ({
     handleSubmit,
     error
 }: ComponentLoginProps) => {
-    const [showPassword, setShowPassword] = useState(false)
 
     return (
         <form onSubmit={handleSubmit} className="bg-gray-100 p-8 rounded-lg shadow-md w-100">
@@ -30,14 +29,12 @@ export const CommponentLogin = ({
                     label="Username"
                     text={user}
                     onInputChange={setUser}
-                    type="text"
                 />
                 <AuthBoxInput
                     label="Password"
                     text={password}
                     onInputChange={setPassword}
-                    type={showPassword ? "text" : "password"}
-                    onChangeVisibility={() => setShowPassword(!showPassword)}
+                    type="password"
                 />
                 <button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">Login</button>
                 {error.length > 0 &&

@@ -1,6 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ComponentRegister } from "../components/ComponentRegister"
 import { useNavigate } from "react-router-dom"
+import { checkIfLogged } from "../services/LocalStorageUser"
+import { register } from "../services/authServices"
+
 
 const Register = () => {
     const [username, setUsername] = useState('')
@@ -9,6 +12,14 @@ const Register = () => {
     const [error, setError] = useState('')
     const navigate = useNavigate()
 
+    useEffect(() => {
+        if (
+            checkIfLogged()
+        ) {
+            navigate('/profile')
+        }
+    }, [navigate])
+
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
         if (!email || !password) {
@@ -16,16 +27,14 @@ const Register = () => {
             return
         }
         setError('')
-
-        console.log("Registering:", { username, email, password })
-
-        // Guardar datos de usuario recién registrado (para demo).
-        // NO almacenar contraseña sin cifrado en producción.
-        const registered = { username, email }
-        localStorage.setItem('newRegisteredUser', JSON.stringify(registered))
-        localStorage.setItem('newRegisteredPass', password)
-
+        register(username, email, password).then(() => {
+            console.log("Registering:", { username, email, password })
         navigate('/login')
+        }).catch((err) => {
+            console.error("Login failed:", err)
+            setError('Error en el registro. Inténtalo de nuevo.')
+        })
+        
     }
 
     const loginClickHandler = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -36,14 +45,14 @@ const Register = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-green-900">
-            <ComponentRegister 
+            <ComponentRegister
                 username={username}
                 setUsername={setUsername}
-                email={email} 
-                setEmail={setEmail} 
-                password={password} 
-                setPassword={setPassword} 
-                loginClickHandler={loginClickHandler} 
+                email={email}
+                setEmail={setEmail}
+                password={password}
+                setPassword={setPassword}
+                loginClickHandler={loginClickHandler}
                 handleSubmit={handleSubmit}
                 error={error}
             />

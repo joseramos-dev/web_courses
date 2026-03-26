@@ -2,14 +2,14 @@ import type { NavigateFunction } from "react-router-dom"
 import type { InterfaceUser } from "../Interfaces/InterfaceUser"
 import { FaBook, FaChartBar, FaCog, FaEnvelope, FaEye, FaEyeSlash, FaSignOutAlt, FaUserCircle } from "react-icons/fa"
 import { ComponentPageSwitcher } from "./ComponentPageSwitcher"
-import { useState } from "react"
-
+import { useRef, useState } from "react"
+import ModalDialog from "./ModalDialog"
 
 
 export const ComponentProfileInfoCard = (
     { user, onLogout }: { user: InterfaceUser; onLogout: () => void }
 ) => {
-    console.log("Rendering ProfileInfoCard with user:", user)
+
 
     return (
         <div className="flex-1 w-full bg-white p-8 rounded-lg shadow-md flex flex-col md:flex-row items-center md:items-left md:mx-auto">
@@ -33,16 +33,21 @@ export const ComponentProfileInfoCard = (
     )
 }
 
-export const ComponentProfileCoursesCard = ({ navigate, user }: { navigate: NavigateFunction; user: InterfaceUser }) => {
+export const ComponentProfileCoursesCard = (
+    { navigate, user, setModalState }:
+        { navigate: NavigateFunction; user: InterfaceUser; setModalState: (value:string) => void }
+) => {
 
     return (
         <div className="w-full bg-white rounded-lg shadow-md flex flex-col">
+
             <ComponentPageSwitcher components={[
                 // TODO:   se mostrara el historial de cursos, además de tus preferencias (cursos favoritos, cursos en progreso, cursos finalizados ...etc)
                 { labelName: "Preferencias", icon: <FaChartBar />, component: <ComponentPreferencias /> },
                 // TODO: Además, se podra cambiar la info de usuario (saldra una pantalla con un formulario para cada tipo de dato)en configuración se modificaran idioma, tema ...etc.
-                { labelName: "Configuration", icon: <FaCog />, component: <ComponentConfiguration user={user} /> }
+                { labelName: "Configuration", icon: <FaCog />, component: <ComponentConfiguration user={user} setIsEditing={(value:string) => setModalState(value)} /> }
             ]} />
+            
         </div>
     )
 }
@@ -57,43 +62,33 @@ const ComponentPreferencias = () => {
     )
 }
 
-const ComponentConfiguration = ({ user }: { user: InterfaceUser }) => {
+const ComponentConfiguration = ({ user, setIsEditing }: { user: InterfaceUser; setIsEditing: (value:string) => void }) => {
+
     return (
-        <div className="w-full px-8 py-4 h-80 flex flex-col items-center justify-center text-2xl font-bold text-gray-700">
-            {
-                Object.entries(user).map(([key, value]) => (
-                    <ComponentConfigurationItem key={key} label={key} value={String(value)} />
-                ))
-            }
+        <div className="flex flex-col w-full h-auto px-20 py-4 gap-4">
+
+            <ConfigurationListItem label="Username" value={user.name} setIsEditing={() => setIsEditing('name')} />
+            <ConfigurationListItem label="Email" value={user.email} setIsEditing={() => setIsEditing('email')} />
+            <ConfigurationListItem label="Password" value="********" setIsEditing={() => setIsEditing('password')} />
+            <ConfigurationListItem label="Role" value={user.role} setIsEditing={() => setIsEditing('role')} />
         </div>
     )
 }
-
-const ComponentConfigurationItem = ({ label, value }: { label: string, value: string }) => {
-
-    const [editedValue, setEditedValue] = useState(value)
-    const [onVisibility, setVisibility] = useState(true)
+const ConfigurationListItem = ({ label, value, setIsEditing }: { label: string; value: string; setIsEditing: () => void }) => {
 
     return (
-        <div className="w-full h-40  flex flex-row items-center justify-between text-lg font-medium text-gray-700 border-b border-gray-300 px-16">
-            <label className="flex-2 flex items-center">
-                {label}
-            </label>
-            <div className="relative flex-1 mx-4">
-                <input
-                    className="w-full border border-gray-300 rounded px-2 py-1 pr-10 focus:outline-none focus:ring-2 focus:ring-green-600"
-                    type={ (label === "password" && onVisibility) ? "password" : "text"}
-                    value={editedValue}
-                    onChange={(e) => setEditedValue(e.target.value)}
-                />
-                {label === "password" && (
-                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 cursor-pointer" onClick={() => setVisibility(!onVisibility)}>
-                        {onVisibility ? <FaEyeSlash /> : <FaEye />}
-                    </div>
-                )}
+        <>
+
+
+            <div className="flex items-center justify-between gap-4 p-4 mx-4 border-b border-gray-100 last:border-0">
+                <div className="flex items-center gap-4">
+                    <label className="block text-base font-semibold text-gray-700 w-24">{label}</label>
+                    <span className="text-gray-600 text-base">{value}</span>
+                </div>
+                <a href="#" className="text-blue-500 hover:text-blue-700" onClick={() => setIsEditing()}>
+                    edit
+                </a>
             </div>
-
-        </div>
+        </>
     )
-
 }

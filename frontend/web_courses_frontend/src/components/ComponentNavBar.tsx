@@ -14,10 +14,10 @@ function ComponentNavBar() {
       </div>
 
       <div className="flex items-center gap-6">
-        <Link to="/Login"  className="text-gray-600 hover:text-green-600 font-medium transition-colors">
+        <Link to="/Profile"  className="text-gray-600 hover:text-green-600 font-medium transition-colors">
           Courses
         </Link>
-        <Link to="/Register" className="text-gray-600 hover:text-green-600 font-medium transition-colors">
+        <Link to="/Profile" className="text-gray-600 hover:text-green-600 font-medium transition-colors">
           Dashboard
         </Link>
         <Link

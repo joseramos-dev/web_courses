@@ -24,7 +24,6 @@ export const ComponentRegister = ({
     handleSubmit,
     error
 }: ComponentRegisterProps) => {
-    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <form onSubmit={handleSubmit} className="bg-gray-100 p-8 rounded-lg shadow-md w-100">
@@ -34,7 +33,6 @@ export const ComponentRegister = ({
                     label="Username"
                     text={username}
                     onInputChange={setUsername}
-                    type="text"
                 />
                 <AuthBoxInput
                     label="Email"
@@ -46,8 +44,7 @@ export const ComponentRegister = ({
                     label="Password"
                     text={password}
                     onInputChange={setPassword}
-                    type={showPassword ? "text" : "password"}
-                    onChangeVisibility={() => setShowPassword(!showPassword)}
+                    type="password"
                 />
                 <button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4 transition-colors">Create Account</button>
                 {error.length > 0 &&

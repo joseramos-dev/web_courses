@@ -46,7 +46,7 @@ async def get_user(user_id: int):
     return {"error": "User not found"}
 
 
-@app.post("/users")
+@app.post("/register")
 async def create_user(user: CourseUserModel):
     data  = aux_getDbTestData()
     user_dict = user.model_dump()
@@ -54,6 +54,7 @@ async def create_user(user: CourseUserModel):
     data.append(user_dict)
     with aux_getDbFile().open("w", encoding="utf-8") as f:
         json.dump(data, f)
+    print(user_dict)
     return user_dict
 
 
@@ -68,7 +69,22 @@ async def login(userName: str, password: str):
                 raise HTTPException(status_code=401, detail="Incorrect password")
     raise HTTPException(status_code=404, detail="User not found")
 
-
+@app.put("/update")
+async def update_user(user: CourseUserModel):
+    found = False
+    data  = aux_getDbTestData()
+    user_dict = user.model_dump()
+    for i, u in enumerate(data):
+        if u["id"] == user.id:
+            data[i] = user_dict
+            found = True
+            break
+    if found:
+        with aux_getDbFile().open("w", encoding="utf-8") as f:
+            json.dump(data, f)
+            return {"message": "User updated successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="User not found")
 
 
 ###########################################
@@ -79,6 +95,7 @@ def aux_getDbTestData():
     db_file = aux_getDbFile()
     with db_file.open("r", encoding="utf-8") as f:
         data = json.load(f)
+    print(f"app.py:aux_getDbTestData(): Loaded {len(data)} users from the database.")
     return data
 
 def aux_appendDbTestData(user: CourseUserModel):

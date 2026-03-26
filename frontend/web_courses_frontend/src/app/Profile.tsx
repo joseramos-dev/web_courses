@@ -1,23 +1,28 @@
-import { use, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, type NavigateFunction } from "react-router-dom";
-import { ComponentProfileCoursesCard as ComponentProfileMenuCard, ComponentProfileInfoCard } from '../components/ComponentsProfile';
+import { ComponentProfileCoursesCard, ComponentProfileInfoCard } from '../components/ComponentsProfile';
 import { logout } from '../services/authServices';
-import EditProfileInfoCard from './EditProfile';
 import ComponentNoLogged from '../components/ComponentNoLogged';
 import { type InterfaceUser } from '../Interfaces/InterfaceUser';
+import ModalDialog from '../components/ModalDialog';
+import toast from 'react-hot-toast';
+import { updateUser } from '../services/UserServices';
 
-//diseño: dos columnas:
-//izquierda: foto de perfil, nombre, email, botón de editar perfil
-//derecha: información adicional, como cursos inscritos, progreso, etc.
+
 
 const Profile = () => {
     const navigate = useNavigate();
+    //los posibles valores seran: "none","name, "email", "password"
+    const [state, setState] = useState<string>('None')
+    const [userData, setUserData] = useState<InterfaceUser | null>(null)
 
-    const userData:InterfaceUser | null = useMemo(() => {
+
+    useMemo(() => {
         const raw = localStorage.getItem('userData')
+        console.log(raw)
         if (!raw) return null
         try {
-            return JSON.parse(raw)
+            return setUserData(JSON.parse(raw))
         } catch {
             return null
         }
@@ -28,35 +33,43 @@ const Profile = () => {
         navigate('/login')
     }
 
-
     if (!userData) {
         return <ComponentNoLogged />
     }
     return (
         <div className="min-h-screen bg-green-800 p-8">
             <div className="max-w-6xl mx-auto flex flex-col gap-8">
-                <ProfileUserCard navigate={navigate} user={userData} onLogout={onLogout} />
-                <ProfileMenuCard navigate={navigate} user={userData}/>
+                <ComponentProfileInfoCard
+                    user={userData}
+                    onLogout={onLogout}
+                />
+                <ComponentProfileCoursesCard
+                    navigate={navigate}
+                    user={userData}
+                    setModalState={(value: string) => setState(value)}
+                />
+                {
+                    state === 'None' ? null : (
+                        <ModalDialog
+                            label={state}
+                            value={userData[state as keyof InterfaceUser] as string}
+                            setState={(s: string) => setState(s)}
+                            onSubmitBehavior={(newValue: string) => {
+                                const newUserData = { ...userData, [state]: newValue }
+                                updateUser(newUserData).then(() => {
+                                    toast.success(`${state} updated successfully: ${newValue}`);
+                                    setState('None')
+                                    setUserData(newUserData)
+                                }).catch((err) => {
+                                    console.error("Login failed:", err)
+                                })
+                            }}
+                            listOptions={state === "role" ? ["student", "admin", "instructor"] : null}
+                        />
+                    )
+                }
             </div>
         </div>
-    )
-}
-
-const ProfileUserCard = (
-    { navigate, user, onLogout }:
-        { navigate: NavigateFunction, user: InterfaceUser, onLogout: () => void }
-) => {
-    return (
-        ComponentProfileInfoCard({ user, onLogout })
-    )
-}
-
-const ProfileMenuCard = (
-    { navigate, user }:
-        { navigate: NavigateFunction; user: InterfaceUser }
-) => {
-    return (
-        ComponentProfileMenuCard({ navigate, user })
     )
 }
 
