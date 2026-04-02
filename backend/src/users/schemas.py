@@ -1,6 +1,7 @@
 """Course database schema definitions for the application."""
 
 from enum import Enum
+from datetime import datetime
 
 from pydantic import BaseModel
 
@@ -11,11 +12,22 @@ class UserRole(str, Enum):
     INSTRUCTOR = "instructor"
     ADMIN = "admin"
 
-class CourseUserModel(BaseModel):
-    """Model for creating a new course user."""
-    id: int | None = None
+class UserSchema(BaseModel):
+    """Model for user."""
+    id: int
     name: str
     email: str
     password: str
     role: UserRole
-    date_creation: str
+    date_creation: datetime
+
+class UserCreateSchema(BaseModel):
+    """Model for creating a new course user."""
+    name:str
+    email: str
+    password: str
+    role: UserRole
+
+class UserLoginSchema(BaseModel):
+    name_or_email: str
+    password: str

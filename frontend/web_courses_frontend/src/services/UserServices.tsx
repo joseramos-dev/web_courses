@@ -3,11 +3,11 @@ import type { InterfaceUser } from "../Interfaces/InterfaceUser";
 import { setLocalStorageUser } from "./LocalStorageUser";
 
 
-export const updateUser = async (userData:InterfaceUser) =>{
+export const updateUser = async (userData: InterfaceUser) =>{
     try{
         // TODO : añadir seguridad, que compruebe que el nombre no este repetido
         console.log(`[authService]::updateUser() actualizando valores de user: ${userData.id}, ${userData.name}`)
-        const response = await api.put('/update', userData)
+        const response = await api.put('/users/', userData)
         setLocalStorageUser(userData)
         return response.data;
     }catch(error:any){

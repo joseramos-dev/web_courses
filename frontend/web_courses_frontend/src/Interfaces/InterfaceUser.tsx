@@ -1,10 +1,10 @@
 
 export interface InterfaceUser {
-    id: number,
+    id?: number,
     name: string,
     email: string,
-    password?: string,
+    password: string,
     role: 'admin' | 'student' | 'instructor',
-    date_creation: string
+    date_creation?: string
 }
 
