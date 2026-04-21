@@ -1,9 +1,6 @@
-import type { NavigateFunction } from "react-router-dom"
 import type { InterfaceUser } from "../Interfaces/InterfaceUser"
-import { FaBook, FaChartBar, FaCog, FaEnvelope, FaEye, FaEyeSlash, FaSignOutAlt, FaUserCircle } from "react-icons/fa"
+import { FaChartBar, FaCog, FaEnvelope, FaSignOutAlt, FaUserCircle } from "react-icons/fa"
 import { ComponentPageSwitcher } from "./ComponentPageSwitcher"
-import { useRef, useState } from "react"
-import ModalDialog from "./ModalDialog"
 
 
 export const ComponentProfileInfoCard = (
@@ -34,8 +31,8 @@ export const ComponentProfileInfoCard = (
 }
 
 export const ComponentProfileCoursesCard = (
-    { navigate, user, setModalState }:
-        { navigate: NavigateFunction; user: InterfaceUser; setModalState: (value:string) => void }
+    { user, setModalState }:
+        { user: InterfaceUser; setModalState: (value:string) => void }
 ) => {
 
     return (

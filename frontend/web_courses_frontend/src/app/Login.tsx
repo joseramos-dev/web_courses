@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom"
 import { CommponentLogin } from '../components/ComponentLogin'
 import { login } from '../services/authServices'
@@ -45,7 +45,7 @@ const Login = () => {
 
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-green-900">
+        <div className=" flex items-center justify-center grow bg-green-900">
             <CommponentLogin
                 user={userName}
                 setUser={setUserName}

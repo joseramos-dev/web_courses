@@ -44,7 +44,7 @@ const Register = () => {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-green-900">
+        <div className=" flex items-center justify-center bg-green-900 grow">
             <ComponentRegister
                 username={username}
                 setUsername={setUsername}

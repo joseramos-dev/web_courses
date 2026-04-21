@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, type NavigateFunction } from "react-router-dom";
+import { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import { ComponentProfileCoursesCard, ComponentProfileInfoCard } from '../components/ComponentsProfile';
 import { logout } from '../services/authServices';
 import ComponentNoLogged from '../components/ComponentNoLogged';
@@ -12,19 +12,18 @@ import { updateUser } from '../services/UserServices';
 
 const Profile = () => {
     const navigate = useNavigate();
-    //los posibles valores seran: "none","name, "email", "password"
+    // los posibles valores seran: "none", "name", "email", "password"
     const [state, setState] = useState<string>('None')
     const [userData, setUserData] = useState<InterfaceUser | null>(null)
 
-
-    useMemo(() => {
+    useEffect(() => {
         const raw = localStorage.getItem('userData')
         console.log(raw)
-        if (!raw) return null
+        if (!raw) return
         try {
-            return setUserData(JSON.parse(raw))
+            setUserData(JSON.parse(raw))
         } catch {
-            return null
+            return
         }
     }, [])
 
@@ -37,14 +36,13 @@ const Profile = () => {
         return <ComponentNoLogged />
     }
     return (
-        <div className="min-h-screen bg-green-800 p-8">
+        <div className=" bg-green-800 p-8 grow">
             <div className="max-w-6xl mx-auto flex flex-col gap-8">
                 <ComponentProfileInfoCard
                     user={userData}
                     onLogout={onLogout}
                 />
                 <ComponentProfileCoursesCard
-                    navigate={navigate}
                     user={userData}
                     setModalState={(value: string) => setState(value)}
                 />

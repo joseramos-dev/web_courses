@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: jsm
+      POSTGRES_PASSWORD: 123456789
+      POSTGRES_DB: web_courses
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jsm -d web_courses -h localhost -p 5432"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - '8000:8000'
+    environment:
+      DATABASE_URL: postgresql://jsm:123456789@db:5432/web_courses
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/web_courses_frontend/Dockerfile
+    ports:
+      - '5173:5173'
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+    driver: local

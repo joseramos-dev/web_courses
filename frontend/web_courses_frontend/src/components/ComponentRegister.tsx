@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { AuthBoxInput, AuthFooterLink } from "./ComponentAuthShared";
 
 interface ComponentRegisterProps {
